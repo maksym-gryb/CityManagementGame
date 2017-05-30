@@ -20,7 +20,7 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	Resource* pop_growth 	= createResource("population growth", 0, 0);
 	Resource* wood 			= createResource("wood", 500, 0);
 	Resource* housing 		= createResource("house", 30, 0);
-	Resource* farming 		= createResource("farm", 0, 0);
+	Resource* farms 		= createResource("farm", 0, 0);
 	ResourceRelationship rel;
 	
 	// Food Consumption
@@ -33,12 +33,12 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	
 	rel.m_intensity = 0;
 	rel.m_resource = food;
-	rel.m_resource_relation = TAKE_FROM_RESOURCE;
+	rel.m_resource_relation = CONTRIBUTOR;
 	food_consumption->addResourceRelationship(rel);
 	
 	rel.m_intensity = 1;
 	rel.m_resource = pop_growth;
-	rel.m_resource_relation = GIVE_TO_RESOURCE;
+	rel.m_resource_relation = RECEIVER;
 	food_consumption->addResourceRelationship(rel);
 	
 	// Population Growth
@@ -46,7 +46,7 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	
 	rel.m_intensity = 1;
 	rel.m_resource = pop_growth;
-	rel.m_resource_relation = COUNTER;
+	rel.m_resource_relation = TALLY;
 	population_growth->addResourceRelationship(rel);
 	
 	rel.m_intensity = 0.1;
@@ -56,21 +56,35 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	
 	rel.m_intensity = 0;
 	rel.m_resource = population;
-	rel.m_resource_relation = GIVE_TO_RESOURCE;
+	rel.m_resource_relation = RECEIVER;
 	population_growth->addResourceRelationship(rel);
 	
 	// Building Construction
 	Queue* farm_construction = new Queue("Farm Construction", 5, 1, 0, 0, QueueType::CONSTRUCTION);
 	farm_construction->addTag("farm");
 	
-	rel.m_intensity = 4;
+	rel.m_intensity = 20;
 	rel.m_resource = wood;
-	rel.m_resource_relation = TAKE_FROM_RESOURCE;
+	rel.m_resource_relation = CONTRIBUTOR;
 	farm_construction->addResourceRelationship(rel);
 	
 	rel.m_intensity = 1;
-	rel.m_resource = farming;
-	rel.m_resource_relation = GIVE_TO_RESOURCE;
+	rel.m_resource = farms;
+	rel.m_resource_relation = RECEIVER;
+	farm_construction->addResourceRelationship(rel);
+	
+	// Building Construction
+	Queue* farm_construction = new Queue("Food Production", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	farm_construction->addTag("farm");
+	
+	rel.m_intensity = 80;
+	rel.m_resource = farms;
+	rel.m_resource_relation = QUANTITY_NEGOTIATOR;
+	farm_construction->addResourceRelationship(rel);
+	
+	rel.m_intensity = 0;
+	rel.m_resource = food;
+	rel.m_resource_relation = RECEIVER;
 	farm_construction->addResourceRelationship(rel);
 	
 	/* Create City */
