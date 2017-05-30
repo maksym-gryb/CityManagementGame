@@ -60,7 +60,7 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	population_growth->addResourceRelationship(rel);
 	
 	// Building Construction
-	Queue* farm_construction = new Queue("Farm Construction", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	Queue* farm_construction = new Queue("farm", 5, 1, 0, 0, QueueType::CONSTRUCTION);
 	
 	rel.m_intensity = 4;
 	rel.m_resource = wood;
@@ -240,7 +240,10 @@ int MainScene::call(std::string cmd, std::vector<std::string> options)
 		
 		for(int i = 0; i < m_resources.size(); i++)
 			if(m_resources[i]->getName() == r_name)
+			{
 				r = m_resources[i];
+				break;
+			}
 			
 		if(r != NULL)// if the resource is found
 			r->add(r_amount);
@@ -248,8 +251,34 @@ int MainScene::call(std::string cmd, std::vector<std::string> options)
 		{
 			m_user->clear();
 			m_user->push("Could not find Resource:" + r_name + "!");
+		}
+		
+		return 0;
+	}
+	
+	if(cmd == "build")
+	{
+		if(options.size() != 2)
+		{
+			m_user->clear();
+			m_user->push("Command <build> requires 2 arguments, " + std::to_string(options.size()) + " given!");
 			return 0;
 		}
+		
+		std::string q_name = options[0];
+		int amount = std::stoi(options[1]);//catch the exception in the future
+		
+		Queue* q = m_city->getQueueByName(q_name);
+			
+		if(q != NULL)// if the resource is found
+			q->addTimes(amount);
+		else
+		{
+			m_user->clear();
+			m_user->push("Could not find Queue:" + q_name + "!");
+		}
+		
+		return 0;
 	}
 	
 	if(cmd == "clear")
