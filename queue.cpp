@@ -129,6 +129,7 @@ std::string Queue::status()
 	response += m_fill != 0 ? (m_fill > 0 ? "+" : "-") : ""; // is it a '+' OR '-' OR nothing for 0(zero)
 	response += std::to_string(m_fill) + ")" + "/";
 	response += m_max > 0 ? std::to_string(m_max) : "inf";
+	response += " x " += std::to_string(m_times);
 	
 	return response;
 }

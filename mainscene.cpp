@@ -197,9 +197,7 @@ void MainScene::command(std::string cmdstr)
 	if(call(cmd, cmdlst) != 0)
 	{
 		m_user->clear();
-		m_user->push("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		m_user->push("ERROR, command <" + cmd + "> not found!");
-		m_user->push("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	}
 }
 
@@ -210,16 +208,16 @@ int MainScene::call(std::string cmd, std::vector<std::string> options)
 		m_user->clear();
 		
 		// Resources
-		m_user->push("****************************************");
+		m_user->push("*************************");
 		m_user->push("Resources:");
 		for(Resource* r : m_resources)
 			m_user->push(r->status());
-		m_user->push("****************************************");
+		m_user->push("*************************");
 		
 		// City Info
 		for(std::string s : split(m_city->status(), '\n'))
 			m_user->push(s);
-		m_user->push("****************************************");
+		m_user->push("*************************");
 		
 		return 0;
 	}

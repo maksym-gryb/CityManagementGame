@@ -26,7 +26,7 @@ std::string City::status()
 {
 	std::string response = "";
 	
-	response += "Status for City " + m_name + "\n";
+	response += "Queues for City " + m_name + "\n";
 	response += "------------------------------\n";
 	
 	for(Queue* q : m_queues)
