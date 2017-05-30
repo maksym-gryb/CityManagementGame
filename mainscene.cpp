@@ -74,24 +74,25 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	farm_construction->addResourceRelationship(rel);
 	
 	// Building Construction
-	Queue* farm_construction = new Queue("Food Production", 5, 1, 0, 0, QueueType::CONSTRUCTION);
-	farm_construction->addTag("farm");
+	Queue* food_production = new Queue("Food Production", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	food_production->addTag("farm");
 	
 	rel.m_intensity = 80;
 	rel.m_resource = farms;
 	rel.m_resource_relation = QUANTITY_NEGOTIATOR;
-	farm_construction->addResourceRelationship(rel);
+	food_production->addResourceRelationship(rel);
 	
 	rel.m_intensity = 0;
 	rel.m_resource = food;
 	rel.m_resource_relation = RECEIVER;
-	farm_construction->addResourceRelationship(rel);
+	food_production->addResourceRelationship(rel);
 	
 	/* Create City */
 	m_city = new City("Gauverre");
 	m_city->addQueue(food_consumption);
 	m_city->addQueue(population_growth);
 	m_city->addQueue(farm_construction);
+	m_city->addQueue(food_production);
 }
 
 MainScene::~MainScene()
