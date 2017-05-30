@@ -168,6 +168,11 @@ int Queue::getMax()
 	return m_max;
 }
 
+void Queue::addTimes(int more)
+{
+	m_times += more;
+}
+
 void Queue::addResourceRelationship(ResourceRelationship rr)
 {
 	m_resources.push_back(rr);

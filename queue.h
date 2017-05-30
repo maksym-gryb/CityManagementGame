@@ -43,6 +43,8 @@ public:
 	void setMax(int max);
 	int getMax();
 	
+	void addTimes(int more);
+	
 	/* Resource */
 	void addResourceRelationship(ResourceRelationship rr);
 	
