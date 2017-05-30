@@ -18,6 +18,8 @@ public:
 	std::string status();
 	std::string getName();
 	
+	Queue* getQueueByName(std::string name);
+	
 private:
 	/* Variables */
 	std::string m_name;

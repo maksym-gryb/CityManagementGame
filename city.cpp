@@ -39,3 +39,12 @@ std::string City::getName()
 {
 	return m_name;
 }
+
+Queue* City::getQueueByName(std::string name)
+{
+	for(Queue* q : m_queues)
+		if(q->getName() == name)
+			return q;
+		
+	return NULL;
+}
