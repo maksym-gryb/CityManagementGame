@@ -60,7 +60,8 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	population_growth->addResourceRelationship(rel);
 	
 	// Building Construction
-	Queue* farm_construction = new Queue("farm", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	Queue* farm_construction = new Queue("Farm Construction", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	farm_construction->addTag("farm");
 	
 	rel.m_intensity = 4;
 	rel.m_resource = wood;
