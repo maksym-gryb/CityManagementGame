@@ -1,12 +1,15 @@
 #include "queue.h"
 
-Queue::Queue(std::string name, unsigned max, int fill, int current)
+Queue::Queue(std::string name, unsigned max, int fill, int current, int times, int type)
 {
 	m_name = name;
 	
 	m_fill = fill;
 	m_current = current;
 	m_max = max;
+	
+	m_times = times;
+	m_type = type;
 }
 
 Queue::~Queue()
@@ -15,7 +18,10 @@ Queue::~Queue()
 }
 
 int Queue::addToQueue()
-{
+{	
+	if(m_times == 0)
+		return NOTHING;
+	
 	if(m_fill == 0)
 	{
 		int initial = m_current;
@@ -109,6 +115,10 @@ void Queue::actOnResourceRelations(QueueReturn status)//change completely
 				rel.m_resource->take(rel.m_intensity);
 		}
 	}
+	
+	// Decrement repetition counter
+	if(m_times > 0)
+		m_times --;
 }
 
 std::string Queue::status()
