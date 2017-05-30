@@ -18,7 +18,7 @@ public:
 	std::string status();
 	std::string getName();
 	
-	Queue* getQueueByName(std::string name);
+	Queue* getQueueByTag(std::string tag);
 	
 private:
 	/* Variables */

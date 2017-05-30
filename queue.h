@@ -27,6 +27,8 @@ public:
 	~Queue();
 	
 	/* Queue */
+	void addTag(std::string tag);
+	bool checkTag(std::string tag);
 	int addToQueue();
 	int addToQueue(int add);// return FULL or NOT_FULL
 	void actOnResourceRelations(QueueReturn status);
@@ -52,6 +54,7 @@ private:
 	/* Variables */
 	// Queue
 	std::string m_name;
+	std::vector<std::string> m_tags;
 	
 	int m_fill;// if fill == 0, then use ResourceRelation::COUNTER
 	int m_current;

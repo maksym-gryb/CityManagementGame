@@ -17,6 +17,20 @@ Queue::~Queue()
 	//
 }
 
+void Queue::addTag(std::string tag)
+{
+	m_tags.push_back(tag);
+}
+
+bool Queue::checkTag(std::string tag)
+{
+	for(std::string str : m_tags)
+		if(str == tag)
+			return true;
+		
+	return false;
+}
+
 int Queue::addToQueue()
 {	
 	if(m_times == 0)

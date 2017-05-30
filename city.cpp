@@ -40,10 +40,10 @@ std::string City::getName()
 	return m_name;
 }
 
-Queue* City::getQueueByName(std::string name)
+Queue* City::getQueueByTag(std::string tag)
 {
 	for(Queue* q : m_queues)
-		if(q->getName() == name)
+		if(q->checkTag(tag))
 			return q;
 		
 	return NULL;

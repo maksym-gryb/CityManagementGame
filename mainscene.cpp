@@ -263,17 +263,17 @@ int MainScene::call(std::string cmd, std::vector<std::string> options)
 			return 0;
 		}
 		
-		std::string q_name = options[0];
+		std::string q_tag = options[0];
 		int amount = std::stoi(options[1]);//catch the exception in the future
 		
-		Queue* q = m_city->getQueueByName(q_name);
+		Queue* q = m_city->getQueueByTag(q_tag);
 			
 		if(q != NULL)// if the resource is found
 			q->addTimes(amount);
 		else
 		{
 			m_user->clear();
-			m_user->push("Could not find Queue:" + q_name + "!");
+			m_user->push("Could not find Queue:" + q_tag + "!");
 		}
 		
 		return 0;
