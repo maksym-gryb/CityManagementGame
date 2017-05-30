@@ -43,7 +43,7 @@ int Queue::addToQueue()
 		
 		for(const ResourceRelationship& rel : m_resources)
 		{
-			if(rel.m_resource_relation == COUNTER)
+			if(rel.m_resource_relation == TALLY)
 			{
 				int result = rel.m_resource->take(rel.m_intensity);
 				
@@ -114,14 +114,14 @@ void Queue::actOnResourceRelations(QueueReturn status)//change completely
 
 	for(const ResourceRelationship& rel : m_resources)
 	{
-		if(rel.m_resource_relation == GIVE_TO_RESOURCE)
+		if(rel.m_resource_relation == RECEIVER)
 		{
 			if(rel.m_intensity == 0)
 				rel.m_resource->add(negotiated_amount);
 			else
 				rel.m_resource->add(rel.m_intensity);
 		}
-		else if(rel.m_resource_relation == TAKE_FROM_RESOURCE)
+		else if(rel.m_resource_relation == CONTRIBUTOR)
 		{
 			if(rel.m_intensity == 0)
 				rel.m_resource->take(negotiated_amount);
