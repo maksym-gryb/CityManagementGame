@@ -1,11 +1,21 @@
 #include "inc.h"
 
+/*
+ * RECEIVER/CONTRIBUTOR : give/take - respectively - on every Queue Completion
+ * SUSTAINED : give/take, on every tick (i.e. in-game day)
+ * QUANTITY_NEGOTIATOR : Use to get dynamic "intensity" value, based on resource quantity
+ * TALLY : Counts for the Queue
+ */
 enum ResourceRelation{
-	GIVE_TO_RESOURCE = 0,
-	SUSTAIN_RESOURCE,//not implemented
-	TAKE_FROM_RESOURCE,
+	RECEIVER = 0,
+	RECEIVER_SUSTAINED,
+	
+	CONTRIBUTOR,
+	CONTRIBUTOR_SUSTAINED,
+	
 	QUANTITY_NEGOTIATOR,
-	COUNTER
+	
+	TALLY // https://en.wikipedia.org/wiki/Tally_counter
 };
 
 class Resource{
