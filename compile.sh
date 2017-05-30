@@ -1,3 +1,2 @@
 #!/bin/bash
-
-g++ -o demo *.cpp -lncursesw
+g++ -o app *.cpp -lncursesw
