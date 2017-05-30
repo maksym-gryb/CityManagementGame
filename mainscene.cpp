@@ -18,8 +18,9 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	Resource* food 			= createResource("food", 5000, 0);
 	Resource* population 	= createResource("population", 87, 0);
 	Resource* pop_growth 	= createResource("population growth", 0, 0);
-	Resource* wood 			= createResource("wood", 500, 500);
-	Resource* housing 		= createResource("house", 30, 500);
+	Resource* wood 			= createResource("wood", 500, 0);
+	Resource* housing 		= createResource("house", 30, 0);
+	Resource* farming 		= createResource("farm", 0, 0);
 	ResourceRelationship rel;
 	
 	// Food Consumption
@@ -58,10 +59,24 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	rel.m_resource_relation = GIVE_TO_RESOURCE;
 	population_growth->addResourceRelationship(rel);
 	
+	// Building Construction
+	Queue* farm_construction = new Queue("Farm Construction", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	
+	rel.m_intensity = 4;
+	rel.m_resource = wood;
+	rel.m_resource_relation = TAKE_FROM_RESOURCE;
+	farm_construction->addResourceRelationship(rel);
+	
+	rel.m_intensity = 1;
+	rel.m_resource = farming;
+	rel.m_resource_relation = GIVE_TO_RESOURCE;
+	farm_construction->addResourceRelationship(rel);
+	
 	/* Create City */
 	m_city = new City("Gauverre");
 	m_city->addQueue(food_consumption);
 	m_city->addQueue(population_growth);
+	m_city->addQueue(farm_construction);
 }
 
 MainScene::~MainScene()
