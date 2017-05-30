@@ -13,5 +13,8 @@
 #include <ctime>
 #include <list>
 #include <vector>
+#include <chrono>
+
+using namespace std::chrono;
 
 #endif /* INC_H */

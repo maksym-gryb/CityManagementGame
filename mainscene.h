@@ -35,14 +35,18 @@ private:
 	Tile* m_user;
 	Tile* m_console;
 	
-	int m_update_timer;
-	int m_day_length;
-	long m_timer_next;
+	//int m_update_timer;
+	double m_day_length;
+	high_resolution_clock::time_point m_timer_begin;
 	
 	bool m_running;
 	
 	int m_day;
+	
+	// fast forward info
 	int m_fast_forward_date;
+	double m_ff_timer_diff;
+	int m_fast_forward_speed;
 	
 	/* City */
 	City* m_city;

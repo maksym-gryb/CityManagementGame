@@ -6,9 +6,9 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	m_user = NULL;
 	m_console = NULL;
 	
-	m_update_timer = 2000;
-	m_day_length = 5000;
-	m_timer_next = 0;
+	//m_update_timer = 2000;
+	m_day_length = 5.0;
+	m_timer_begin = high_resolution_clock::now();
 	
 	m_running = true;
 	
@@ -135,11 +135,14 @@ int MainScene::run()
 
 void MainScene::update()
 {
-	long now = time(NULL)*1000;
+	auto now = high_resolution_clock::now();
+	double difference = duration_cast<duration <double> >(now - m_timer_begin).count();
 	
-	if(now > m_timer_next || m_fast_forward_date > m_day)
+	bool fast_forward = m_fast_forward_date > m_day && difference > m_ff_timer_diff;
+	
+	if(difference > m_day_length || fast_forward)
 	{
-		m_timer_next = now + m_day_length;
+		m_timer_begin = high_resolution_clock::now();
 		m_day++;
 		m_update->push("Day: " + std::to_string(m_day));
 		
@@ -297,19 +300,21 @@ int MainScene::call(std::string cmd, std::vector<std::string> options)
 	
 	if(cmd == "ff" || cmd == "fastforward")// fast forward
 	{
-		if(options.size() != 1)
+		if(options.size() < 1 || options.size() > 2)
 		{
 			m_user->clear();
-			m_user->push("Command <fastforward> requires 1 arguments, " + std::to_string(options.size()) + " given!");
+			m_user->push("Command <fastforward> requires 1-2 arguments, " + std::to_string(options.size()) + " given!");
 			return 0;
 		}
 		
 		int ff_days = std::stoi(options[0]);//catch the exception in the future
-		
 		m_fast_forward_date = ff_days + m_day;
+		
+		m_ff_timer_diff = options.size() < 2 ? /*DEFAULT_SPEED=*/1.0/3.0 : 1.0/std::stod(options[1]);//catch the exception in the future
 		
 		m_user->clear();
 		m_user->push("Fast forwarding to day: " + std::to_string(m_fast_forward_date));
+		m_user->push("Speed: " + std::to_string(m_ff_timer_diff*1000) + "ms / day");
 		
 		return 0;
 	}
