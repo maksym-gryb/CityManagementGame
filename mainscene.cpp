@@ -94,7 +94,7 @@ void MainScene::setup()
 	} m_window = {WindowInfo::getInstance()->getX(), WindowInfo::getInstance()->getY()};
 	
 	int x, w;
-	x = w = m_window.w/2 + 10;
+	x = w = m_window.w/2 + 5;
 	m_update = new Tile(0, 0, w, m_window.h - 1);
 	m_update->setBorder(0b0110);
 	
