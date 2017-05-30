@@ -74,7 +74,7 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	farm_construction->addResourceRelationship(rel);
 	
 	// Building Construction
-	Queue* food_production = new Queue("Food Production", 5, 1, 0, 0, QueueType::CONSTRUCTION);
+	Queue* food_production = new Queue("Food Production", 10, 1, 0);
 	food_production->addTag("farm");
 	
 	rel.m_intensity = 80;
@@ -137,7 +137,7 @@ void MainScene::update()
 {
 	long now = time(NULL)*1000;
 	
-	if(now > m_timer_next)
+	if(now > m_timer_next || m_fast_forward_date > m_day)
 	{
 		m_timer_next = now + m_day_length;
 		m_day++;
@@ -291,6 +291,25 @@ int MainScene::call(std::string cmd, std::vector<std::string> options)
 			m_user->clear();
 			m_user->push("Could not find Queue:" + q_tag + "!");
 		}
+		
+		return 0;
+	}
+	
+	if(cmd == "ff" || cmd == "fastforward")// fast forward
+	{
+		if(options.size() != 1)
+		{
+			m_user->clear();
+			m_user->push("Command <fastforward> requires 1 arguments, " + std::to_string(options.size()) + " given!");
+			return 0;
+		}
+		
+		int ff_days = std::stoi(options[0]);//catch the exception in the future
+		
+		m_fast_forward_date = ff_days + m_day;
+		
+		m_user->clear();
+		m_user->push("Fast forwarding to day: " + std::to_string(m_fast_forward_date));
 		
 		return 0;
 	}

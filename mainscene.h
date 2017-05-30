@@ -42,6 +42,7 @@ private:
 	bool m_running;
 	
 	int m_day;
+	int m_fast_forward_date;
 	
 	/* City */
 	City* m_city;
