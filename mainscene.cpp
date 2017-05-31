@@ -15,9 +15,9 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	m_day = 0;
 	
 	/* Set Resources */
-	Resource* food 			= createResource("food", 5000, 0);
+	Resource* food 			= createResource("food", 1000, 0);
 	Resource* population 	= createResource("population", 87, 0);
-	Resource* pop_growth 	= createResource("population growth", 0, 0);
+	Resource* pop_growth 	= createResource("pop growth counter", 0, 0);
 	Resource* wood 			= createResource("wood", 500, 0);
 	Resource* housing 		= createResource("house", 30, 0);
 	Resource* farms 		= createResource("farm", 0, 0);
@@ -75,7 +75,6 @@ MainScene::MainScene() : Scene("The Town of Gauverre")
 	
 	// Building Construction
 	Queue* food_production = new Queue("Food Production", 10, 1, 0);
-	food_production->addTag("farm");
 	
 	rel.m_intensity = 80;
 	rel.m_resource = farms;
@@ -120,6 +119,10 @@ void MainScene::setup()
 	
 	m_console = new Tile(0, m_window.h - 1, m_window.w, 1, 1);
 	m_console->push("_");
+	
+#ifdef DEBUG
+	command("ff 100 3");
+#endif /* DEBUG */
 }
 
 int MainScene::run()
@@ -147,6 +150,10 @@ void MainScene::update()
 		m_update->push("Day: " + std::to_string(m_day));
 		
 		m_city->run(m_update);
+		
+#ifdef DEBUG
+		call("status");
+#endif /* DEBUG */
 	}
 }
 	
@@ -222,7 +229,7 @@ void MainScene::command(std::string cmdstr)
 
 int MainScene::call(std::string cmd, std::vector<std::string> options)
 {
-	if(cmd == "status")
+	if(cmd == "status" || cmd == "s")
 	{
 		m_user->clear();
 		

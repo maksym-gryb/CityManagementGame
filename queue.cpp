@@ -1,6 +1,6 @@
 #include "queue.h"
 
-Queue::Queue(std::string name, unsigned max, int fill, int current, int times, int type)
+Queue::Queue(std::string name, int max, int fill, int current, int times, int type)
 {
 	m_name = name;
 	
@@ -38,37 +38,41 @@ int Queue::addToQueue()
 	
 	if(m_fill == 0)
 	{
-		int initial = m_current;
-		QueueReturn ret = NOTHING;
+		bool changed = false;
+		QueueReturn ret = QueueReturn::NOTHING;
 		
 		for(const ResourceRelationship& rel : m_resources)
 		{
 			if(rel.m_resource_relation == TALLY)
 			{
-				int result = rel.m_resource->take(rel.m_intensity);
+				int result = rel.m_resource->take();
 				
-				if(result > 0)
-					m_current += rel.m_intensity;
-				else if (result < 0)
-					m_current -= rel.m_intensity;
+				if(result != 0)
+				{
+					m_current += result;
+					changed = true;
+				}
+				else
+					changed = false;
 			}
 		}
-	
-		if(initial == m_current)// i.e. nothing changed
-			ret = NOTHING;
 		
+		if(!changed)
+			ret = QueueReturn::NOTHING;
 		else if(m_max != 0 && m_current >= m_max)
 		{
-			m_current -= m_max;
-			ret = FULL;
+			//m_current -= m_max;
+			m_current = 0;
+			ret = QueueReturn::FULL;
 		}
-		else if(m_current <= 0)
+		else if(m_current < 0)
 		{
-			m_current += m_max;
-			ret = EMPTY;
+			//m_current += m_max;
+			m_current = m_max - 1;
+			ret = QueueReturn::EMPTY;
 		}
 	
-		if(ret != NOTHING)
+		if(ret != QueueReturn::NOTHING)
 			actOnResourceRelations(ret);
 		
 		return ret;
@@ -79,22 +83,26 @@ int Queue::addToQueue()
 
 int Queue::addToQueue(int add)
 {
-	QueueReturn ret = NOTHING;
+	QueueReturn ret;
 	
 	m_current += add;
 	
-	if(m_max != 0 && m_current >= m_max)
+	if(add == 0)
+		ret = QueueReturn::NOTHING;
+	else if(m_max != 0 && m_current >= m_max)
 	{
-		m_current -= m_max;
-		ret = FULL;
+		//m_current -= m_max;
+		m_current = 0;
+		ret = QueueReturn::FULL;
 	}
-	else if(m_current <= 0)
+	else if(m_current < 0)
 	{
-		m_current += m_max;
-		ret = EMPTY;
+		//m_current += m_max;
+		m_current = m_max - 1;
+		ret = QueueReturn::EMPTY;
 	}
 	
-	if(ret != NOTHING)
+	if(ret != QueueReturn::NOTHING)
 		actOnResourceRelations(ret);
 	
 	return ret;
@@ -102,24 +110,47 @@ int Queue::addToQueue(int add)
 
 void Queue::actOnResourceRelations(QueueReturn status)//change completely
 {
-	/* Negotiate Amount */
-	int negotiated_amount = 0;
-
-	for(const ResourceRelationship& rel : m_resources)
-		if(rel.m_resource_relation == QUANTITY_NEGOTIATOR)
-			negotiated_amount += rel.m_intensity * rel.m_resource->getAmount();
+	// set slope
+	//int slope = status == FULL ? 1 : -1;
+	int slope = 1;
+	
+	if(status == QueueReturn::FULL)
+	{
+		for(const ResourceRelationship& rel : m_resources)
+		{
+			if(rel.m_resource_relation == CONTRIBUTOR)
+			{
+				slope = rel.m_resource->getAmount() >= 0 ? 1 : -1;
+			}
+		}
 		
-	if(status == EMPTY)
-		negotiated_amount *= -1;
+		//slope = slope >= 0 ? 1 : -1;
+	}
+	
+	if(status == QueueReturn::EMPTY)
+		slope = -1;
 
+	// Negotiate Amount
+	int negotiated_amount = 0;
+	
+	for(const ResourceRelationship& rel : m_resources)
+	{
+		if(rel.m_resource_relation == QUANTITY_NEGOTIATOR && rel.m_resource->getAmount() > 0)
+		{
+			int tmp = rel.m_intensity * rel.m_resource->getAmount();
+			negotiated_amount += (tmp == 0 ? 1 : tmp);
+		}
+	}
+	
+	// Receivers / Constributors
 	for(const ResourceRelationship& rel : m_resources)
 	{
 		if(rel.m_resource_relation == RECEIVER)
 		{
 			if(rel.m_intensity == 0)
-				rel.m_resource->add(negotiated_amount);
+				rel.m_resource->add(negotiated_amount * slope);
 			else
-				rel.m_resource->add(rel.m_intensity);
+				rel.m_resource->add(rel.m_intensity * slope);
 		}
 		else if(rel.m_resource_relation == CONTRIBUTOR)
 		{
@@ -143,7 +174,7 @@ std::string Queue::status()
 	response += m_fill != 0 ? (m_fill > 0 ? "+" : "-") : ""; // is it a '+' OR '-' OR nothing for 0(zero)
 	response += std::to_string(m_fill) + ")" + "/";
 	response += m_max > 0 ? std::to_string(m_max) : "inf";
-	response += " x " + std::to_string(m_times);
+	response += " x " + (m_times == -1 ? "always" : std::to_string(m_times));
 	
 	return response;
 }

@@ -1,11 +1,11 @@
 #include "resource.h"
 
-Resource::Resource(std::string name, int amount, int max, int min)
+Resource::Resource(std::string name, int amount, int max/*, int min*/)
 {
 	m_name = name;
 	
 	m_amount = amount;
-	m_min = min;
+	//m_min = min;
 	m_max = max;
 }
 
@@ -36,11 +36,25 @@ void Resource::add(int amount)
 	m_amount += amount;
 }
 
+int Resource::take()
+{
+	int buf = m_amount;
+	m_amount = 0;
+	
+	return buf;
+}
+
 int Resource::take(int amount)
 {
 	m_amount -= amount;
 	
-	return m_amount + amount;
+	// compare signs
+	return m_amount;
+}
+
+void Resource::setAmount(int amount)
+{
+	m_amount = amount;
 }
 
 int Resource::getAmount()

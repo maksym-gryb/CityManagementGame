@@ -4,8 +4,8 @@
 #include "tile.h"
 
 enum QueueReturn{
-	EMPTY,
-	NOTHING = 0,
+	EMPTY = 0,
+	NOTHING,
 	FULL
 };
 
@@ -23,7 +23,7 @@ struct ResourceRelationship{
 class Queue{
 public:
 	/* Constructors */
-	Queue(std::string name, unsigned max = 100, int fill = 1, int current = 0, int times = -1, int type = PRODUCTION);
+	Queue(std::string name, int max = 100, int fill = 1, int current = 0, int times = -1, int type = PRODUCTION);
 	~Queue();
 	
 	/* Queue */
@@ -58,7 +58,7 @@ private:
 	
 	int m_fill;// if fill == 0, then use ResourceRelation::COUNTER
 	int m_current;
-	unsigned m_max;// value of 0(zero) means no_limit
+	int m_max;// value of 0(zero) means no_limit
 	int m_times;// -1 => never end
 	int m_type;
 	

@@ -13,8 +13,15 @@ City::~City()
 void City::run(Tile* display_tile)
 {
 	for(Queue* q : m_queues)
-		if(q->addToQueue() == QueueReturn::FULL)
+	{
+		int r = q->addToQueue();
+		
+		if(r == QueueReturn::FULL)
 			display_tile->push("[*] City:" + getName() + " => " + "QueueCompleted:" + q->getName());
+		
+		if(r == QueueReturn::EMPTY)
+			display_tile->push("[*] City:" + getName() + " => " + "QueueFailed:" + q->getName());
+	}
 }
 
 void City::addQueue(Queue* new_queue)
