@@ -3,6 +3,8 @@
 
 //#define _XOPEN_SOURCE_EXTENDED
 
+//#define DEBUG
+
 #include <ncursesw/curses.h>
 #include <unistd.h>
 #include <string.h>
