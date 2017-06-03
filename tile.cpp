@@ -2,6 +2,8 @@
 
 Tile::Tile(int p_x, int p_y, int p_w, int p_h, unsigned p_size)
 {
+	m_redraw = false;
+
 	m_x = p_x;
 	m_y = p_y;
 	m_width = p_w - 1;// the -1 is a temporary solution
@@ -13,6 +15,11 @@ Tile::Tile(int p_x, int p_y, int p_w, int p_h, unsigned p_size)
 Tile::~Tile()
 {
 	//DESTROY
+}
+
+bool Tile::redraw()
+{
+	return m_redraw;
 }
 
 void Tile::print()
@@ -39,6 +46,8 @@ void Tile::print()
 	}
 	
 	drawBorder();
+
+	m_redraw = false;
 }
 
 void Tile::setBorder(int p_border)
@@ -63,28 +72,28 @@ void Tile::drawBorder()
 	if(m_border & TOP_BORDER)
 	{
 		for(int x = m_x - 1, y = m_y - 1; x <= m_x + m_width + 1; x++)
-			mvaddch(y, x, ACS_BLOCK);
+			mvaddch(y, x, '#');
 			//mvaddch(y, x, ACS_HLINE);
 	}
 	
 	if(m_border & RIGHT_BORDER)
 	{
 		for(int x = m_x + m_width + 1, y = m_y - 1; y <= m_y + m_height + 1; y++, x = m_x + m_width + 1)
-			mvaddch(y, x, ACS_BLOCK);
+			mvaddch(y, x, '#');
 			//mvaddch(y, x, ACS_VLINE);
 	}
 	
 	if(m_border & BOTTOM_BORDER)
 	{
 		for(int x = m_x - 1, y = m_y + m_height + 1; x <= m_x + m_width + 1; x++)
-			mvaddch(y, x, ACS_BLOCK);
+			mvaddch(y, x, '#');
 			//mvaddch(y, x, '#');
 	}
 	
 	if(m_border & LEFT_BORDER)
 	{
 		for(int x = m_x - 1, y = m_y - 1; y <= m_y + m_height + 1; y++)
-			mvaddch(y, x, ACS_BLOCK);
+			mvaddch(y, x, '#');
 			//mvaddch(y, x, ACS_VLINE);
 	}
 }
@@ -95,6 +104,8 @@ void Tile::push(std::string str)
 		m_memory.pop_front();
 	
 	m_memory.push_back(str);
+
+	m_redraw = true;
 }
 
 std::string Tile::pop()

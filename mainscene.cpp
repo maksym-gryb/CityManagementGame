@@ -159,15 +159,22 @@ void MainScene::update()
 	
 void MainScene::print()
 {
-	clear();
+	bool redraw = m_update->redraw()
+		   || m_user->redraw()
+		   || m_console->redraw();
+
+	if(redraw)
+	{
+		clear();
 	
-	m_update->print();
+		m_update->print();
 	
-	m_user->print();
+		m_user->print();
 	
-	m_console->print();
+		m_console->print();
 	
-	refresh();
+		refresh();
+	}
 }
 
 void MainScene::handleInput()

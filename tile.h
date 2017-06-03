@@ -15,6 +15,7 @@ public:
 	~Tile();
 	
 	/* Tile */
+	bool redraw();
 	void print();
 	void setBorder(int p_border = 0);
 	void drawBorder();
@@ -29,6 +30,8 @@ private:
 	/* Variables */
 	std::list<std::string> m_memory;
 	unsigned m_memory_max_size;
+
+	bool m_redraw;
 	
 	int m_x;
 	int m_y;
